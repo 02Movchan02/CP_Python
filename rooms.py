@@ -53,8 +53,6 @@ def view():
     p = Paginator(obj, l)
     page = p.page(1)
     treev.delete(*treev.get_children())
-    #cur.execute("Select * FROM Rooms order by RoomID Limit ?", [lim])
-    #count = cur.fetchall()
     count = page.object_list
     for i in count:
         treev.insert("", 'end', values=i)
@@ -71,10 +69,13 @@ def ph():
     print(photo)
 
 def add(h1,h2,h3,h4,h5,h6,h7):
-    cur.execute("INSERT INTO Rooms (RoomID, Type, PhoneRoom, Places, Price_day, Price_phone, Photo) values (?, ?, ?, ?, ?, ?, ?)", (h1,h2,h3,h4,h5,h6,h7))
-    conn.commit()
-    view()
-    new_wnd.destroy()
+    try:
+        cur.execute("INSERT INTO Rooms (RoomID, Type, PhoneRoom, Places, Price_day, Price_phone, Photo) values (?, ?, ?, ?, ?, ?, ?)", (h1,h2,h3,h4,h5,h6,h7))
+        conn.commit()
+        view()
+        new_wnd.destroy()
+    except:
+        mb.showinfo("Ошибка", "Поля заполнены некорректно")
     
 def rmadd():
     global new_wnd
