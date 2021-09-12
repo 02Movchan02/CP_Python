@@ -76,14 +76,55 @@ def add(h1,h2,h3,h4,h5,h6,h7):
         new_wnd.destroy()
     except:
         mb.showinfo("Ошибка", "Поля заполнены некорректно")
-    
+
+ 
 def rmadd():
+       
     global new_wnd
     new_wnd=Tk()
     new_wnd.title("Добавление комнаты")
+
+    def dig(*args):
+        value1 = var1.get()
+        if value1 != "":
+            if value1.isdigit()==False:
+                mb.showinfo("Ошибка", "Здесь должно быть число")
+                e1.delete(0, 'end')
+                
+        value2 = var2.get()
+        if value2 != "":
+            if value2.isdigit()==False:
+                mb.showinfo("Ошибка", "Здесь должно быть число")
+                e2.delete(0, 'end')
+                
+        value3 = var3.get()
+        if value3 != "":
+            if value3.isdigit()==False:
+                mb.showinfo("Ошибка", "Здесь должно быть число")
+                e3.delete(0, 'end')
+
+        value4 = var4.get()
+        if value4 != "":
+            if value4.isdigit()==False:
+                mb.showinfo("Ошибка", "Здесь должно быть число")
+                e4.delete(0, 'end') 
+            
+
+    var1 = StringVar(new_wnd)
+    var1.trace('w', dig)
+
+    var2 = StringVar(new_wnd)
+    var2.trace('w', dig)
+
+    var3 = StringVar(new_wnd)
+    var3.trace('w', dig)
+
+    var4 = StringVar(new_wnd)
+    var4.trace('w', dig)
+
     
     l1 = Label(new_wnd,text="Номер комнаты").pack(side='top', pady=10, padx=5)
-    e1 = Entry(new_wnd)
+    e1 = Entry(new_wnd, textvariable=var1)
     
     l2 = Label(new_wnd,text="Тип")
     cb1 = ttk.Combobox(new_wnd, values=["Люкс","Полулюкс","Обычный"])
@@ -93,16 +134,19 @@ def rmadd():
     cb2 = ttk.Combobox(new_wnd, values=["Нет","Есть"])
     
     l4 = Label(new_wnd,text="Мест")
-    e2 = Entry(new_wnd)
+    e2 = Entry(new_wnd, textvariable=var2)
     
     l5 = Label(new_wnd,text="Стоимость в сутки")
-    e3 = Entry(new_wnd)
+    e3 = Entry(new_wnd, textvariable=var3)
     
     l6 = Label(new_wnd,text="Стоимость за телефон")
-    e4 = Entry(new_wnd)
+    e4 = Entry(new_wnd, textvariable=var4)
     
     btnP = Button(new_wnd,text="Выбор фото", width=10, command=ph)
 
+    
+
+    
     btnAcc = Button(new_wnd, text="Добавить", width=10, command=lambda:add(h1=e1.get(), h2=cb1.get(), h3=cb2.get(), h4=e2.get(), h5=e3.get(), h6=e4.get(), h7=photo))
     e1.pack(side='top', pady=10, padx=5)
     l2.pack(side='top', pady=10, padx=5)
@@ -117,6 +161,8 @@ def rmadd():
     e4.pack(side='top', pady=10, padx=5)
     btnP.pack(side='top', pady=10, padx=5)
     btnAcc.pack(side='top', pady=10, padx=5)
+
+    
 
 
 
