@@ -43,11 +43,11 @@ def addUser():
     else:
         importlib.reload(addUser)
 
-def exit():
-    answer = mb.askyesno(title="Выход", message="Вы уверены, что хотите выйти?")
-    if answer:
-        rootA.destroy()
+def report():
+    
+    mb.showinfo("Подождите!", "Отчёты на стадии разработки")
 
+    #Здесь нужен ворд или эксель
 
 b1 = Button(rootA, text="Клиенты", width=25, command=cl).pack(padx=5, pady=10)
 
@@ -57,5 +57,5 @@ b4 = Button(rootA, text="Просмотр аренды", width=25, command=workV
 
 b5 = Button(rootA, text="Добавление пользователя", width=25, command=addUser).pack(padx=5, pady=10)
 
-b3 = Button(rootA, text="Выход", width=25, command=exit).pack(padx=5, pady=10)
+b3 = Button(rootA, text="Отчёты", width=25, command=report).pack(padx=5, pady=10)
 rootA.mainloop()
