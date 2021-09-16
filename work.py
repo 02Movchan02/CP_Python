@@ -10,10 +10,10 @@ rootWork = Tk()
 rootWork.title("Аренда")
 
 l1 = Label(rootWork, text="Номер комнаты")
-cb1 = ttk.Combobox(rootWork)
+cb1 = ttk.Combobox(rootWork, state='readonly')
 
 l2 = Label(rootWork, text="Клиент")
-cb2 = ttk.Combobox(rootWork)
+cb2 = ttk.Combobox(rootWork, state='readonly')
 
 l3 = Label(rootWork, text="Количество дней")
 e1 = Entry(rootWork)

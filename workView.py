@@ -41,7 +41,7 @@ def view():
         treev.insert("", 'end', values=i)
     conn.commit()
 frame = LabelFrame(rootView, text='Поиск')
-cbS = ttk.Combobox(frame, values=['Все','По Номеру комнаты', 'По Номеру клиента', 'По Количеству дней', 'К оплате'])
+cbS = ttk.Combobox(frame, values=['Все','По Номеру комнаты', 'По Номеру клиента', 'По Количеству дней', 'К оплате'], state='readonly')
 cbS.current(0)
 
 def select(event):
@@ -132,7 +132,7 @@ def sel(event):
     l=cbL.get()
     view()
 
-cbL = ttk.Combobox(rootView, values=['5', '10','15'])
+cbL = ttk.Combobox(rootView, values=['5', '10','15'], state='readonly')
 cbL.current(0)
 cbL.bind('<<ComboboxSelected>>', sel)
 cbL.place(relx=0.2, rely=0.05)
