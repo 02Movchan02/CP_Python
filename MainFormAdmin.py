@@ -44,10 +44,15 @@ def addUser():
         importlib.reload(addUser)
 
 def report():
-    
-    mb.showinfo("Подождите!", "Отчёты на стадии разработки")
-
+    global cli3, report
+    #mb.showinfo("Подождите!", "Отчёты на стадии разработки")
+    if (cli3==0):
+        import report
+        cli3+=1
+    else:
+        importlib.reload(report)
     #Здесь нужен ворд или эксель
+
 
 b1 = Button(rootA, text="Клиенты", width=25, command=cl).pack(padx=5, pady=10)
 
