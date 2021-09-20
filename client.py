@@ -1,6 +1,8 @@
 from tkinter import*
 from tkinter import ttk
 import sqlite3 as sql
+from django.core.paginator import Paginator
+from tkinter import messagebox as mb
 
 conn=sql.connect('Hotel.db')
 cur=conn.cursor()
@@ -34,9 +36,15 @@ treev.heading("5", text="Паспорт")
 treev.heading("6", text="Номер телефона")
 
 def view():
+    global l, page, p
+    cur.execute("Select * FROM Clients")
+    obj=cur.fetchall()
+    conn.commit()
+    p = Paginator(obj, l)
+    page = p.page(1)
     treev.delete(*treev.get_children())
     cur.execute("Select * FROM Clients order by ClientID Limit ?", [lim])
-    count = cur.fetchall()
+    count = page.object_list
     for i in count:
         treev.insert("", 'end', values=i)
     conn.commit()
@@ -103,7 +111,7 @@ def sort(event):
 
 frame = LabelFrame(rootClient, text="Поиск")
 
-cbSch = ttk.Combobox(frame, values=['Все','По Фамилии', 'По Имени', 'По Отчеству', 'По Паспорту', 'По Номеру телефона'])
+cbSch = ttk.Combobox(frame, state='readonly', values=['Все','По Фамилии', 'По Имени', 'По Отчеству', 'По Паспорту', 'По Номеру телефона'])
 cbSch.current(0)
 
 def search(*args):
@@ -144,16 +152,18 @@ var.trace('w', search)
 
 
 def left():
-    global lim, l
-    if int(lim) >5:
-        lim=int(lim)-int(l)
+    global page, p
+    if page.has_previous()==True:
+        nump = page.previous_page_number()
+        page = p.page(nump)
         treev.delete(*treev.get_children())
         cur.execute("Select * FROM Clients order by ClientID Limit ? ", [lim])
-        count = cur.fetchall()
+        count = page.object_list
         for i in count:
             treev.insert("", 'end', values=i)
         conn.commit()
-    
+    else:
+        mb.showinfo("Внимание", "Больше назад нельзя")
 count = Label(rootClient)
 
 def count_label():
@@ -164,15 +174,18 @@ def count_label():
     count['text']="Всего "+str(counEnd[0]) +" записей"
 
 def rigth():
-    global lim, l
-    if int(lim)<=int(l):
-        lim=int(lim)+int(l)
+    global page, p
+    if page.has_next()==True:
+        nump = page.next_page_number()
+        page = p.page(nump)
         treev.delete(*treev.get_children())
         cur.execute("Select * FROM Clients order by ClientID Limit ? OFFSET '"+l+"'", [lim])
-        count = cur.fetchall()
+        count = page.object_list
         for i in count:
             treev.insert("", 'end', values=i)
         conn.commit()
+    else:
+        mb.showinfo("Внимание", "Дальше нет страниц")
 
 def sel(event):
     global lim, l
@@ -185,13 +198,13 @@ entrS = Entry(frame, textvariable=var)
 b_left=Button(rootClient, text="<-", command=left).place(relx=0.15, rely=0.9)
 b_right=Button(rootClient, text="->", command=rigth).place(relx=0.30, rely=0.9)
 
-cb1 = ttk.Combobox(rootClient, values=['Без сортировки', 'В алфавитном порядке', 'Не в алфавитном порядке'])
+cb1 = ttk.Combobox(rootClient, state='readonly', values=['Без сортировки', 'В алфавитном порядке', 'Не в алфавитном порядке'])
 cb1.current(0)
 cb1.pack(side='top', padx=5, pady=5)
 
 count_label()
 count.place(relx=0.04, rely=0.04)
-cbL = ttk.Combobox(rootClient, values=['5', '10','15'])
+cbL = ttk.Combobox(rootClient, values=['5', '10','15'], state='readonly')
 cbL.current(0)
 cbL.bind('<<ComboboxSelected>>', sel)
 cbL.place(relx=0.2, rely=0.05)
