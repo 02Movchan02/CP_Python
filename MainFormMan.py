@@ -1,5 +1,6 @@
 from tkinter import*
 import importlib
+from tkinter import messagebox as mb
 
 rootM=Tk()
 rootM.title("Главная форма Менеджера")
@@ -19,11 +20,12 @@ def cl():
 
 def rm():
     global cli2, rooms
-    if (cli2==0):
-        import rooms
-        cli2+=1
-    else:
-        importlib.reload(rooms)
+    mb.showinfo("Упс...", "Нужна витрина")
+    #if (cli2==0):
+        #import rooms
+        #cli2+=1
+    #else:
+        #importlib.reload(rooms)
         
 
 def work():
