@@ -3,24 +3,30 @@ from tkinter import ttk
 from tkinter.filedialog import*
 from PIL import Image, ImageTk
 import sqlite3 as sql
+import importlib
+
 conn=sql.connect('Hotel.db')
 cur=conn.cursor()
 rootWind = Tk()
 rootWind.title("Комнаты")
 i=1
 j=1
-images=[]  
+
+images=[]
+
+
+    
 def b1(event):
     f=event.widget['text']
     cur.execute("Select * FROM Rooms Where RoomID=?", [str(f)])
     new=Tk()
-    
+    new.title("Информация")
 
     one_result=cur.fetchall()
     
-    lm = Label(new, text="Информация о номере ").pack(pady=10)
-    treev=ttk.Treeview(new)
-    treev.pack(side='left')
+    lm = Label(new, text="Информация о номере").pack(pady=10)
+    treev=ttk.Treeview(new, height=3)
+    treev.pack(side='top')
     scrlbar = ttk.Scrollbar(new, orient='vertical', command=treev.yview)
     scrlbar.pack(side='right', fill='y')
     treev.configure(yscrollcommand=scrlbar.set)
@@ -47,12 +53,18 @@ def b1(event):
     treev.heading("8", text="Бронь")
     treev.heading("9", text="Фото")
 
+    def work():
+        rootWind.destroy()
+        new.destroy()
+        import work
+        
+    b1 =  Button(new, text="Оформить", width=15, command=work).pack(side='top', padx=10, pady=15)
 
     for i in one_result:
         treev.insert("", 'end', values=i)
     conn.commit()
 
-cur.execute("Select * FROM Rooms;")
+cur.execute("Select * FROM Rooms Where Employment = 'Свободно';")
 rows = cur.fetchall()
 
 for row in rows:
