@@ -5,7 +5,7 @@ conn = sql.connect('Hotel.db')
 cur=conn.cursor()
 
 cur.execute("""CREATE TABLE IF NOT EXISTS Rooms(
-RoomID INTEGER PRIMARY KEY,
+RoomID INTEGER UNIQUE PRIMARY KEY,
 Type TEXT,
 PhoneRoom TEXT,
 Places TEXT,
@@ -18,11 +18,11 @@ Photo TEXT);
 conn.commit()
 
 cur.execute("""CREATE TABLE IF NOT EXISTS Clients(
-ClientID INTEGER PRIMARY KEY AUTOINCREMENT,
+ClientID INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT,
 Surname TEXT,
 Name TEXT,
 Middle_name TEXT,
-Passport TEXT,
+Passport TEXT UNIQUE,
 Phone TEXT
 );
 """);
@@ -39,14 +39,14 @@ Status TEXT DEFAULT 'Оплачено');
 conn.commit()
 
 cur.execute("""CREATE TABLE IF NOT EXISTS Users(
-UserID INTEGER PRIMARY KEY AUTOINCREMENT,
+UserID INTEGER UNIQUE PRIMARY KEY AUTOINCREMENT,
 Surname TEXT,
 Name TEXT,
-Passport TEXT,
+Passport TEXT UNIQUE,
 Adress TEXT,
 Email BLOB,
-LoginUser TEXT,
-PasswordUser TEXT,
+LoginUser TEXT UNIQUE,
+PasswordUser TEXT UNIQUE,
 Post TEXT);
 """)
 conn.commit()
