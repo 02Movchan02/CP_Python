@@ -2,6 +2,7 @@ from tkinter import*
 from tkinter import ttk
 from tkinter import messagebox as mb
 import sqlite3 as sql
+from django.core.paginator import Paginator
 
 conn=sql.connect('Hotel.db')
 cur=conn.cursor()
@@ -34,12 +35,18 @@ treev.heading("5", text="К оплате")
 
 
 def view():
+    global l, page, p
     treev.delete(*treev.get_children())
-    cur.execute("Select RoomNum, ClientNum, Duration_of_Days, Status, Payment FROM Work order by RoomNum Limit ?", [lim])
-    count = cur.fetchall()
+    cur.execute("Select RoomNum, ClientNum, Duration_of_Days, Status, Payment FROM Work order by RoomNum")
+    obj = cur.fetchall()
+    conn.commit()
+    p = Paginator(obj, l)
+    page = p.page(1)
+    count = page.object_list
     for i in count:
         treev.insert("", 'end', values=i)
     conn.commit()
+    
 frame = LabelFrame(rootView, text='Поиск')
 cbS = ttk.Combobox(frame, values=['Все','По Номеру комнаты', 'По Номеру клиента', 'По Количеству дней', 'К оплате'], state='readonly')
 cbS.current(0)
@@ -96,16 +103,16 @@ def retu():
 
 
 def left():
-    global lim, l
-    if int(lim) >5:
-        lim=int(lim)-int(l)
+    global page, p
+    if page.has_previous()==True:
+        nump = page.previous_page_number()
+        page = p.page(nump)
         treev.delete(*treev.get_children())
-        cur.execute("Select * FROM Work order by RoomNum Limit ? ", [lim])
-        count = cur.fetchall()
+        count = page.object_list
         for i in count:
             treev.insert("", 'end', values=i)
-        conn.commit()
-    
+    else:
+        mb.showinfo("Внимание", "Больше назад нельзя")
 count = Label(rootView)
 
 def count_label():
@@ -116,15 +123,16 @@ def count_label():
     count['text']="Всего "+str(counEnd[0]) +" записей"
 
 def rigth():
-    global lim, l
-    if (lim<l):
-        lim=int(lim)+int(l)
+    global page, p
+    if page.has_next()==True:
+        nump = page.next_page_number()
+        page = p.page(nump)
         treev.delete(*treev.get_children())
-        cur.execute("Select * FROM Work order by ClientNum Limit ? OFFSET '"+l+"'", [lim])
-        count = cur.fetchall()
+        count = page.object_list
         for i in count:
             treev.insert("", 'end', values=i)
-        conn.commit()
+    else:
+        mb.showinfo("Внимание", "Дальше нет страниц")
     
 def sel(event):
     global lim, l
