@@ -42,8 +42,6 @@ def view():
     conn.commit()
     p = Paginator(obj, l)
     page = p.page(1)
-    treev.delete(*treev.get_children())
-    cur.execute("Select * FROM Clients order by ClientID Limit ?", [lim])
     count = page.object_list
     for i in count:
         treev.insert("", 'end', values=i)
@@ -157,7 +155,6 @@ def left():
         nump = page.previous_page_number()
         page = p.page(nump)
         treev.delete(*treev.get_children())
-        cur.execute("Select * FROM Clients order by ClientID Limit ? ", [lim])
         count = page.object_list
         for i in count:
             treev.insert("", 'end', values=i)
@@ -179,7 +176,6 @@ def rigth():
         nump = page.next_page_number()
         page = p.page(nump)
         treev.delete(*treev.get_children())
-        cur.execute("Select * FROM Clients order by ClientID Limit ? OFFSET '"+l+"'", [lim])
         count = page.object_list
         for i in count:
             treev.insert("", 'end', values=i)
