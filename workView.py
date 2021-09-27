@@ -63,30 +63,35 @@ treev.bind('<<TreeviewSelect>>', select)
 
 def search(*args):
     value=var.get()
-    if cbS.get()=="По Номеру комнаты":
-        cur.execute("select RoomNum, ClientNum, Duration_of_Days, Status, Payment from Work Where RoomNum Like ?",('{}%'.format(entrS.get()),))
-        al = cur.fetchall()
-        treev.delete(*treev.get_children())
-        for i in al:
-            treev.insert("", 'end', values=i)
-    elif cbS.get()=="По Номеру клиента":
-        cur.execute("select RoomNum, ClientNum, Duration_of_Days, Status, Payment from Work Where ClientNum Like ?",('{}%'.format(entrS.get()),))
-        al = cur.fetchall()
-        treev.delete(*treev.get_children())
-        for i in al:
-            treev.insert("", 'end', values=i)
-    elif cbS.get()=="По Количеству дней":
-        cur.execute("select RoomNum, ClientNum, Duration_of_Days, Payment from Work Where Duration_of_Days Like ?",('{}%'.format(entrS.get()),))
-        al = cur.fetchall()
-        treev.delete(*treev.get_children())
-        for i in al:
-            treev.insert("", 'end', values=i)
-    elif cbS.get()=="К оплате":
-        cur.execute("select RoomNum, ClientNum, Duration_of_Days, Status, Payment from Work Where Payment Like ?",('{}%'.format(entrS.get()),))
-        al = cur.fetchall()
-        treev.delete(*treev.get_children())
-        for i in al:
-            treev.insert("", 'end', values=i)
+    if value !="":
+        if value.isdigit()==True:
+            if cbS.get()=="По Номеру комнаты":
+                cur.execute("select RoomNum, ClientNum, Duration_of_Days, Status, Payment from Work Where RoomNum Like ?",('{}%'.format(entrS.get()),))
+                al = cur.fetchall()
+                treev.delete(*treev.get_children())
+                for i in al:
+                    treev.insert("", 'end', values=i)
+            elif cbS.get()=="По Номеру клиента":
+                cur.execute("select RoomNum, ClientNum, Duration_of_Days, Status, Payment from Work Where ClientNum Like ?",('{}%'.format(entrS.get()),))
+                al = cur.fetchall()
+                treev.delete(*treev.get_children())
+                for i in al:
+                    treev.insert("", 'end', values=i)
+            elif cbS.get()=="По Количеству дней":
+                cur.execute("select RoomNum, ClientNum, Duration_of_Days, Payment from Work Where Duration_of_Days Like ?",('{}%'.format(entrS.get()),))
+                al = cur.fetchall()
+                treev.delete(*treev.get_children())
+                for i in al:
+                    treev.insert("", 'end', values=i)
+            elif cbS.get()=="К оплате":
+                cur.execute("select RoomNum, ClientNum, Duration_of_Days, Status, Payment from Work Where Payment Like ?",('{}%'.format(entrS.get()),))
+                al = cur.fetchall()
+                treev.delete(*treev.get_children())
+                for i in al:
+                    treev.insert("", 'end', values=i)
+        else:
+            mb.showinfo("Ошибка", "Здесь должно быть число")
+            entrS.delete(0, 'end')
 var=StringVar(rootView)
 var.trace('w', search)
 
