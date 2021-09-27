@@ -15,7 +15,6 @@ j=1
 images=[]
 
 
-    
 def b1(event):
     f=event.widget['text']
     cur.execute("Select * FROM Rooms Where RoomID=?", [str(f)])
@@ -64,7 +63,10 @@ def b1(event):
         treev.insert("", 'end', values=i)
     conn.commit()
 
-cur.execute("Select * FROM Rooms Where Employment = 'Свободно';")
+
+
+
+cur.execute("Select * FROM Rooms")
 rows = cur.fetchall()
 
 for row in rows:
