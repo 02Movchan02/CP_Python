@@ -57,6 +57,8 @@ def view():
     for i in count:
         treev.insert("", 'end', values=i)
     conn.commit()
+    cb1.current(0)
+    cb2['values']=""
 
 def ph():
     global photo
@@ -166,9 +168,9 @@ def rmadd():
 
 
 
-cb1 = ttk.Combobox(rootRoom, values=['Без фильтрации','По номеру комнаты','По наличию телефона', 'По типу комнаты', 'Бронь', 'Состояние'])
+cb1 = ttk.Combobox(rootRoom, values=['Без фильтрации','По номеру комнаты','По наличию телефона', 'По типу комнаты', 'Бронь', 'Состояние'], state='readonly')
 cb1.current(0)
-cb2 = ttk.Combobox(rootRoom)
+cb2 = ttk.Combobox(rootRoom, state='readonly')
 
 def cb_zap(event):
     if cb1.get()=="По номеру комнаты":
@@ -183,6 +185,8 @@ def cb_zap(event):
         cb2['values']='Брони нет', 'Бронь есть'
     elif cb1.get()=="Состояние":
         cb2['values']='Занято', 'Свободно'
+    elif cb1.get()=="Без фильтрации":
+        cb2['values']=""
         
 def select(event):
     c.delete("all")
@@ -298,7 +302,7 @@ def search(event):
 
 All = Button(rootRoom, text="Все", command=view)
 All.place(relx=0.4, rely=0.05)
-cbL = ttk.Combobox(rootRoom, values=['5', '10','15'])
+cbL = ttk.Combobox(rootRoom, values=['5', '10','15'], state='readonly')
 cbL.current(0)
 cbL.bind('<<ComboboxSelected>>', sel)
 cbL.place(relx=0.2, rely=0.05)
@@ -308,12 +312,12 @@ treev.bind('<<TreeviewSelect>>', select)
 l=cbL.get()
 
 cb1.bind('<<ComboboxSelected>>', cb_zap)
-cb1.place(relx=0.5, rely=0.05)
+cb1.place(relx=0.46, rely=0.05)
 cb2.bind('<<ComboboxSelected>>', search)
-cb2.place(relx=0.65, rely=0.05)
+cb2.place(relx=0.57, rely=0.05)
 b_left=Button(rootRoom, text="<-", command=left).place(relx=0.15, rely=0.9)
 b_right=Button(rootRoom, text="->", command=rigth).place(relx=0.30, rely=0.9)
-c.pack(side='top', padx=15, pady=3)
+c.pack(side='top', padx=20, pady=3)
 count_label()
 view()
 count.place(relx=0.04, rely=0.03)
