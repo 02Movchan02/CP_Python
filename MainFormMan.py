@@ -19,13 +19,12 @@ def cl():
         importlib.reload(client)
 
 def rm():
-    global cli2, rooms
-    mb.showinfo("Упс...", "Нужна витрина")
-    #if (cli2==0):
-        #import rooms
-        #cli2+=1
-    #else:
-        #importlib.reload(rooms)
+    global cli2, window
+    if (cli2==0):
+        import window
+        cli2+=1
+    else:
+        importlib.reload(window)
         
 
 def work():
