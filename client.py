@@ -86,24 +86,59 @@ def add():
     btnAddC = Button(rootAddC, text="Добавить", command=lambda:addC(h1=e1.get(), h2=e2.get(), h3=e3.get(), h4=e4.get(), h5=e5.get()))
     btnAddC.pack(side='top', padx=5, pady=5)
 orde = ""
+usl = ""
 def sort(event):
-    global orde
+    global orde, page, p, usl
     if cb1.get()=="В алфавитном порядке":
-        treev.delete(*treev.get_children())
-        cur.execute("Select * FROM Clients order by Surname")
-        count = cur.fetchall()
-        for i in count:
-            treev.insert("", 'end', values=i)
-        conn.commit()
-        orde = "order by Surname"
+        if cbSch.get()=="Все":
+            treev.delete(*treev.get_children())
+            cur.execute("Select * FROM Clients order by ClientID")
+            obj=cur.fetchall()
+            conn.commit()
+            p = Paginator(obj, l)
+            page = p.page(1)
+            count = page.object_list
+            for i in count:
+                treev.insert("", 'end', values=i)
+            conn.commit()
+            orde = "order by Surname"
+        else:
+            treev.delete(*treev.get_children())
+            cur.execute("Select * FROM Clients Where "+usl+" LIKE ? order by "+usl+"", ('{}%'.format(entrS.get()),))
+            obj=cur.fetchall()
+            conn.commit()
+            p = Paginator(obj, l)
+            page = p.page(1)
+            count = page.object_list
+            for i in count:
+                treev.insert("", 'end', values=i)
+            conn.commit()
+            orde = "order by Surname"
     elif cb1.get()=="Не в алфавитном порядке":
-        orde="order by Surname desc"
-        treev.delete(*treev.get_children())
-        cur.execute("Select * FROM Clients order by Surname desc")
-        count = cur.fetchall()
-        for i in count:
-            treev.insert("", 'end', values=i)
-        conn.commit()
+        if cbSch.get()=="Все":
+            treev.delete(*treev.get_children())
+            cur.execute("Select * FROM Clients order by ClientID desc")
+            obj=cur.fetchall()
+            conn.commit()
+            p = Paginator(obj, l)
+            page = p.page(1)
+            count = page.object_list
+            for i in count:
+                treev.insert("", 'end', values=i)
+            conn.commit()
+            orde = "order by Surname desc"
+        else:
+            orde="order by Surname desc"
+            treev.delete(*treev.get_children())
+            cur.execute("Select * FROM Clients Where "+usl+" LIKE ? order by "+usl+" desc", ('{}%'.format(entrS.get()),))
+            obj=cur.fetchall()
+            conn.commit()
+            p = Paginator(obj, l)
+            page = p.page(1)
+            count = page.object_list
+            for i in count:
+                treev.insert("", 'end', values=i)
+            conn.commit()
     elif cb1.get()=="Без сортировки":
         view()
 
@@ -113,38 +148,63 @@ cbSch = ttk.Combobox(frame, state='readonly', values=['Все','По Фамил�
 cbSch.current(0)
 
 def search(*args):
-    global orde
+    global orde, usl
     value=var.get()
     if cbSch.get()=="По Фамилии":
         cur.execute("select * from Clients Where Surname Like ? "+orde,('{}%'.format(entrS.get()),))
-        al = cur.fetchall()
+        obj=cur.fetchall()
+        conn.commit()
+        p = Paginator(obj, l)
+        page = p.page(1)
+        al = page.object_list
         treev.delete(*treev.get_children())
         for i in al:
             treev.insert("", 'end', values=i)
+        usl = "Surname"
     elif cbSch.get()=="По Имени":
         cur.execute("select * from Clients Where Name Like ?"+orde,('{}%'.format(entrS.get()),))
-        al = cur.fetchall()
+        obj=cur.fetchall()
+        conn.commit()
+        p = Paginator(obj, l)
+        page = p.page(1)
+        al = page.object_list
         treev.delete(*treev.get_children())
         for i in al:
             treev.insert("", 'end', values=i)
+        usl = "Name"
     elif cbSch.get()=="По Отчеству":
         cur.execute("select * from Clients Where Middle_name Like ?"+orde,('{}%'.format(entrS.get()),))
-        al = cur.fetchall()
+        obj=cur.fetchall()
+        conn.commit()
+        p = Paginator(obj, l)
+        page = p.page(1)
+        al = page.object_list
         treev.delete(*treev.get_children())
         for i in al:
             treev.insert("", 'end', values=i)
+        usl = "Middle_name"
     elif cbSch.get()=="По Паспорту":
         cur.execute("select * from Clients Where Passport Like ?"+orde,('{}%'.format(entrS.get()),))
-        al = cur.fetchall()
+        obj=cur.fetchall()
+        conn.commit()
+        p = Paginator(obj, l)
+        page = p.page(1)
+        al = page.object_list
         treev.delete(*treev.get_children())
         for i in al:
             treev.insert("", 'end', values=i)
+        usl = "Passport"
     elif cbSch.get()=="По Номеру телефона":
         cur.execute("select * from Clients Where Phone Like ?"+orde,('{}%'.format(entrS.get()),))
-        al = cur.fetchall()
+        obj=cur.fetchall()
+        conn.commit()
+        p = Paginator(obj, l)
+        page = p.page(1)
+        al = page.object_list
         treev.delete(*treev.get_children())
         for i in al:
             treev.insert("", 'end', values=i)
+        usl = "Phone"
 var=StringVar(rootClient)
 var.trace('w', search)
 
