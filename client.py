@@ -37,6 +37,7 @@ treev.heading("6", text="Номер телефона")
 
 def view():
     global l, page, p
+    treev.delete(*treev.get_children())
     cur.execute("Select * FROM Clients")
     obj=cur.fetchall()
     conn.commit()
@@ -250,6 +251,60 @@ def sel(event):
     view()
 entrS = Entry(frame, textvariable=var)
 
+def upd(h1,h2,h3,h4,h5):
+    answer = mb.askyesno(title="Подтверждение", message="Изменить данные?")
+    if answer:
+        cur.execute("UPDATE Clients SET Surname = ?, Name = ?, Middle_name = ?, Passport = ?, Phone = ? Where ClientID = "+Id+"", (h1,h2,h3,h4,h5))
+        conn.commit()
+        view()
+        mb.showinfo("Успешно!", "Данные изменены")
+        new.destroy()
+
+def ins(event):
+    global new, Id
+    try:
+        it = treev.selection()[0]
+        values=treev.item(it, option="values")
+        Id=values[0]
+        new=Tk()
+        l1 = Label(new, text="Фамилия").pack(side='top', padx=5, pady=5)
+        e1 = Entry(new)
+
+        e1.pack(side='top', padx=5, pady=5)
+
+        l2 = Label(new, text="Имя").pack(side='top', padx=5, pady=5)
+        e2 = Entry(new)
+
+        e2.pack(side='top', padx=5, pady=5)
+
+        l3 = Label(new, text="Отчество").pack(side='top', padx=5, pady=5)
+        e3 = Entry(new, textvariable=var)
+
+        e3.pack(side='top', padx=5, pady=5)
+
+        l4 = Label(new, text="Паспорт").pack(side='top', padx=5, pady=5)
+        e4 = Entry(new)
+
+        e4.pack(side='top', padx=5, pady=5)
+
+        l5 = Label(new, text="Номер телефона").pack(side='top', padx=5, pady=5)
+        e5 = Entry(new)
+
+        e5.pack(side='top', padx=5, pady=5)
+
+        bAcc = Button(new, text="Изменить", command=lambda:upd(h1=e1.get(), h2=e2.get(), h3=e3.get(), h4=e4.get(), h5=e5.get())).pack(side='top', padx=5, pady=10)
+
+        e1.insert(0, values[1])
+        e2.insert(0, values[2])
+        e3.insert(0, values[3])
+        e4.insert(0, values[4])
+        e5.insert(0, values[5])
+     
+    except:
+        mb.showinfo("Внимание!", "Сначала необходимо выбрать клиента")
+        
+
+treev.bind('<Button-3>', ins)
 
 b_left=Button(rootClient, text="<-", command=left).place(relx=0.15, rely=0.9)
 b_right=Button(rootClient, text="->", command=rigth).place(relx=0.30, rely=0.9)
