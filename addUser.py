@@ -15,7 +15,7 @@ treev.pack(side='left')
 def upd():
     answer = mb.askyesno(title="Подтверждение", message="Изменить данные?")
     if answer:
-        cur.execute("UPDATE Users SET Surname = ?, Name = ?, Passport = ?, Adress = ?, Email = ?, LoginUser = ?, PasswordUser = ?, Post = ?", (e1.get(), e2.get(), e3.get(), e4.get(), e5.get(), e6.get(), e7.get(), cb1.get()))
+        cur.execute("UPDATE Users SET Surname = ?, Name = ?, Passport = ?, Adress = ?, Email = ?, LoginUser = ?, PasswordUser = ?, Post = ? Where UserID = "+Id+"", (e1.get(), e2.get(), e3.get(), e4.get(), e5.get(), e6.get(), e7.get(), cb1.get()))
         conn.commit()
         clear()
         view()
@@ -35,6 +35,7 @@ def show():
 pcheck = Checkbutton(rootAddU, text="Показать пароль", variable=isCheck, onvalue=1, offvalue=0, command=show)
 
 def ins(event):
+    global Id
     try:
         clear()
         b2['state']='normal'
@@ -51,6 +52,7 @@ def ins(event):
         cb1.insert(0, values[8])
     except:
         mb.showinfo("Внимание!","Для редактирования необходимо выбрать пользователя")
+        b2['state']='disable'
     
 scrlbar = ttk.Scrollbar(rootAddU, orient='vertical', command=treev.yview)
 scrlbar.pack(side='right', fill='y')
@@ -90,6 +92,7 @@ def view():
     conn.commit()
 view()
 
+var = StringVar(rootAddU)
 l1 = Label(rootAddU, text="Фамилия").pack(side='top', padx=5, pady=5)
 e1 = Entry(rootAddU)
 
@@ -101,7 +104,7 @@ e2 = Entry(rootAddU)
 e2.pack(side='top', padx=5, pady=5)
 
 l3 = Label(rootAddU, text="Паспорт").pack(side='top', padx=5, pady=5)
-e3 = Entry(rootAddU)
+e3 = Entry(rootAddU, textvariable=var)
 
 e3.pack(side='top', padx=5, pady=5)
 
@@ -140,7 +143,7 @@ def clear():
     e5.delete(0, 'end')
     e6.delete(0, 'end')
     e7.delete(0, 'end')
-    cb1.delete(0, 'end')
+    cb1.delete(0, 'end')         
 
 def AddU():
     try:
@@ -149,6 +152,7 @@ def AddU():
         view()
     except:
         mb.showinfo("Ошибка", "Проверьте, все ли поля заполнены")
+
 
 b1 = Button(rootAddU, text="Добавить", width=15, command=AddU).pack(side='top', padx=5, pady=10)
 
