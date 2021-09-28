@@ -74,7 +74,7 @@ def ex1():
         i3+=1
     wb.save('Списки комнат.xlsx')
     conn.commit()
-    conn.close()
+    #conn.close()
     mb.showinfo("Успешно", "Отчёт был создан и сохранён в корневой папке")
 
 
@@ -96,7 +96,7 @@ def ex2():
         i+=1
     wb.save('Данные клиентов.xlsx')
     conn.commit()
-    conn.close()
+    #conn.close()
     mb.showinfo("Успешно", "Отчёт был составлен и сохранён в коневой папке")
 
 b1 = Button(rootRep, text = "Рейтинг клиентов", width=35, command=ex2).pack(side='top',padx=5, pady=10)
