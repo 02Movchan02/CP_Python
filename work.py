@@ -53,18 +53,21 @@ def select(event):
         phone=[0]
         
 def addW(h1,h2,h3):
-    pay = (price[0]*float(h3))+phone[0]
-    answer = mb.askyesno(title="Подтверждение", message="К оплате "+str(pay)+" рублей, Подтвердить?")
-    if answer:
-        cur.execute("Insert into Work (RoomNum, ClientNum, Duration_of_Days, Payment) values (?,?,?,?);", (h1,h2,h3,pay))
-        conn.commit()
-        cur.execute("UPDATE Rooms Set Employment = 'Занято' Where RoomID = ?;", [str(RoomID)])
-        conn.commit()
-        if p1.get()=="Бронь есть":
-            cur.execute("UPDATE Rooms Set Booking = 'Бронь есть' Where RoomID = ?;", [str(RoomID)])
+    try:
+        pay = (price[0]*float(h3))+phone[0]
+        answer = mb.askyesno(title="Подтверждение", message="К оплате "+str(pay)+" рублей, Подтвердить?")
+        if answer:
+            cur.execute("Insert into Work (RoomNum, ClientNum, Duration_of_Days, Payment) values (?,?,?,?);", (h1,h2,h3,pay))
             conn.commit()
-            cur.execute("UPDATE Work Set Status = 'Не оплачено' Where RoomID = ?;", [str(RoomID)])
+            cur.execute("UPDATE Rooms Set Employment = 'Занято' Where RoomID = ?;", [str(RoomID)])
             conn.commit()
+            if p1.get()=="Бронь есть":
+                cur.execute("UPDATE Rooms Set Booking = 'Бронь есть' Where RoomID = ?;", [str(RoomID)])
+                conn.commit()
+                cur.execute("UPDATE Work Set Status = 'Не оплачено' Where RoomID = ?;", [str(RoomID)])
+                conn.commit()
+    except:
+        mb.showinfo("Ошибка!", "Заполните данные")
 cb1.bind('<<ComboboxSelected>>', select)
 cb2.bind('<<ComboboxSelected>>', select)
 
@@ -82,4 +85,5 @@ ch1.pack(padx=5,pady=5)
 
 zap()
 btnAc = Button(rootWork, text="Оформить", command=lambda:addW(h1=RoomID, h2=ClientID, h3=e1.get())).pack(padx=5,pady=5)
+
 rootWork.mainloop()
