@@ -146,13 +146,15 @@ def clear():
     cb1.delete(0, 'end')         
 
 def AddU():
-    try:
-        cur.execute("INSERT INTO Users (Surname, Name, Passport, Adress, Email, LoginUser, PasswordUser, Post) values (?,?,?,?,?,?,?,?)", (e1.get(), e2.get(), e3.get(), e4.get(), e5.get(), e6.get(), e7.get(), cb1.get()))
-        conn.commit()
-        view()
-    except:
+    if ((e1.get() !="") & (e2.get() !="") & (e3.get() !="") & (e4.get() !="") & (e5.get() !="") & (e6.get() !="") & (e7.get() !="") & (cb1.get() !="")):
+        try:
+            cur.execute("INSERT INTO Users (Surname, Name, Passport, Adress, Email, LoginUser, PasswordUser, Post) values (?,?,?,?,?,?,?,?)", (e1.get(), e2.get(), e3.get(), e4.get(), e5.get(), e6.get(), e7.get(), cb1.get()))
+            conn.commit()
+            view()
+        except:
+            mb.showinfo("Ошибка", "Проверьте, все ли поля заполнены")
+    else:
         mb.showinfo("Ошибка", "Проверьте, все ли поля заполнены")
-
 
 b1 = Button(rootAddU, text="Добавить", width=15, command=AddU).pack(side='top', padx=5, pady=10)
 
