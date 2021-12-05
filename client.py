@@ -49,10 +49,16 @@ def view():
     conn.commit()
 
 def addC(h1,h2,h3,h4,h5):
-    cur.execute("Insert into Clients (Surname, Name, Middle_name, Passport, Phone) values (?,?,?,?,?);", (h1,h2,h3,h4,h5))
-    conn.commit()
-    view()
-    rootAddC.destroy()
+    if ((h1 !="") & (h2 !="") & (h3 !="") & (h4 !="") & (h5 !="")):
+        try:
+            cur.execute("Insert into Clients (Surname, Name, Middle_name, Passport, Phone) values (?,?,?,?,?);", (h1,h2,h3,h4,h5))
+            conn.commit()
+            view()
+            rootAddC.destroy()
+        except:
+            mb.showinfo("Ошибка!", "Проверьте корректность данных")
+    else:
+        mb.showinfo("Ошибка!", "Введите данные")
 
 def add():
     global rootAddC
