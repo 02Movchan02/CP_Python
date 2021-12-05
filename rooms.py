@@ -203,16 +203,18 @@ def loadi(name):
     return ImageTk.PhotoImage(img, master=c)
 
 def osv():
-    it = treev.selection()[0]
-    values=treev.item(it, option="values")
-    id_r=values[0]
-    answer = mb.askyesno(title="Подтверждение", message="Вы точно хотите изменить статус номера?")
-    if answer:
-        cur.execute("UPDATE Rooms SET Employment = 'Свободно' Where RoomID = ?;", [str(id_r)])
-        conn.commit()
-        view()
-    rootRoom.mainloop()
-
+    try:
+        it = treev.selection()[0]
+        values=treev.item(it, option="values")
+        id_r=values[0]
+        answer = mb.askyesno(title="Подтверждение", message="Вы точно хотите изменить статус номера?")
+        if answer:
+            cur.execute("UPDATE Rooms SET Employment = 'Свободно' Where RoomID = ?;", [str(id_r)])
+            conn.commit()
+            view()
+        rootRoom.mainloop()
+    except:
+        mb.showinfo("Ошибка!", "Сначала нужно выбрать запись")
 
 
 def left():
@@ -255,15 +257,18 @@ def sel(event):
     view()
 
 def delet():
-    it = treev.selection()[0]
-    values=treev.item(it, option="values")
-    id_r=values[0]
-    answer = mb.askyesno(title="Подтверждение", message="Вы точно хотите удалить выбранную запись?")
-    if answer:
-        cur.execute("DELETE FROM Rooms Where RoomID = ?;", [str(id_r)])
-        conn.commit()
-        view()
-    rootRoom.mainloop()
+    try:
+        it = treev.selection()[0]
+        values=treev.item(it, option="values")
+        id_r=values[0]
+        answer = mb.askyesno(title="Подтверждение", message="Вы точно хотите удалить выбранную запись?")
+        if answer:
+            cur.execute("DELETE FROM Rooms Where RoomID = ?;", [str(id_r)])
+            conn.commit()
+            view()
+        rootRoom.mainloop()
+    except:
+        mb.showinfo("Ошибка!", "Сначала нужно выбрать запись")
 
 
 def search(event):
