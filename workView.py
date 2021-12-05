@@ -97,14 +97,17 @@ var.trace('w', search)
 
 def retu():
     global stat, id_room
-    if (stat=="Не оплачено"):
-        answer = mb.askyesno(title="Подтверждение", message="Вы действительно хотите оплатить эту бронь?")
-        if answer:
-            cur.execute("UPDATE Work SET Status = 'Оплачено' Where RoomNum =?;", [str(id_room)])
-            conn.commit()
-            view()
-    else:
-        answer = mb.showinfo(title="Предупреждение", message="Эта бронь уже оплачена")
+    try:
+        if (stat=="Не оплачено"):
+            answer = mb.askyesno(title="Подтверждение", message="Вы действительно хотите оплатить эту бронь?")
+            if answer:
+                cur.execute("UPDATE Work SET Status = 'Оплачено' Where RoomNum =?;", [str(id_room)])
+                conn.commit()
+                view()
+        else:
+            answer = mb.showinfo(title="Предупреждение", message="Эта бронь уже оплачена")
+    except:
+        mb.showinfo("Ошибка!", "Сначало выберите запись")
 
 
 def left():
