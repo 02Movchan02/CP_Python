@@ -147,12 +147,10 @@ def clear():
 
 def AddU():
     if ((e1.get() !="") & (e2.get() !="") & (e3.get() !="") & (e4.get() !="") & (e5.get() !="") & (e6.get() !="") & (e7.get() !="") & (cb1.get() !="")):
-        try:
-            cur.execute("INSERT INTO Users (Surname, Name, Passport, Adress, Email, LoginUser, PasswordUser, Post) values (?,?,?,?,?,?,?,?)", (e1.get(), e2.get(), e3.get(), e4.get(), e5.get(), e6.get(), e7.get(), cb1.get()))
-            conn.commit()
-            view()
-        except:
-            mb.showinfo("Ошибка", "Проверьте, все ли поля заполнены")
+        cur.execute("INSERT INTO Users (Surname, Name, Passport, Adress, Email, LoginUser, PasswordUser, Post) values (?,?,?,?,?,?,?,?)", (e1.get(), e2.get(), e3.get(), e4.get(), e5.get(), e6.get(), e7.get(), cb1.get()))
+        conn.commit()
+        view()
+        clear()
     else:
         mb.showinfo("Ошибка", "Проверьте, все ли поля заполнены")
 
