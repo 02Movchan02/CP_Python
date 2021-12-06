@@ -2,6 +2,8 @@ from tkinter import*
 from tkinter import ttk
 from tkinter import messagebox as mb
 import sqlite3 as sql
+import docx
+
 
 conn=sql.connect('Hotel.db')
 cur=conn.cursor()
@@ -66,6 +68,29 @@ def addW(h1,h2,h3):
                 conn.commit()
                 cur.execute("UPDATE Work Set Status = 'Не оплачено' Where RoomID = ?;", [str(RoomID)])
                 conn.commit()
+            else:
+                doc = docx.Document()
+                p = doc.add_paragraph("Чек")
+                p.alignment = 1
+
+                p2 = doc.add_paragraph("Комната №")
+                p2.add_run(" "+h1).bold = True
+
+                p2.alignment = 1
+                p3 = doc.add_paragraph("Клиент №")
+                p3.add_run(" "+h2).bold = True
+
+                p3.alignment = 1
+
+                p4 = doc.add_paragraph("Количество дней - ")
+                p4.add_run(" "+h3).bold = True
+                p4.alignment = 1
+                p5 = doc.add_paragraph("К оплате - ")
+                p5.add_run(" "+str(pay)).bold = True
+                p5.alignment = 2
+                doc.save('Чек.docx')
+
+                
     except:
         mb.showinfo("Ошибка!", "Заполните данные")
 cb1.bind('<<ComboboxSelected>>', select)
