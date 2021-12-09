@@ -32,6 +32,8 @@ cur.execute("""CREATE TABLE IF NOT EXISTS Work(
 WorkID INTEGER PRIMARY KEY AUTOINCREMENT,
 RoomNum INT,
 ClientNum INT,
+DateStart TEXT,
+DateEnd TEXT,
 Duration_of_Days INT,
 Payment REAL,
 Status TEXT DEFAULT 'Оплачено');
