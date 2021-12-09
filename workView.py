@@ -17,7 +17,7 @@ scrlbar = ttk.Scrollbar(rootView, orient='vertical', command=treev.yview)
 scrlbar.pack(side='right', fill='y')
 treev.configure(yscrollcommand=scrlbar.set)
 
-treev["columns"] = ("1", "2", "3", "4", "5")
+treev["columns"] = ("1", "2", "3", "4", "5", "6", "7")
 
 treev['show']='headings'
 
@@ -26,18 +26,22 @@ treev.column("2", width=120, anchor='c')
 treev.column("3", width=120, anchor='c')
 treev.column("4", width=120, anchor='se')
 treev.column("5", width=100, anchor='se')
+treev.column("6", width=120, anchor='se')
+treev.column("7", width=100, anchor='se')
 
 treev.heading("1", text="Номер комнаты")
 treev.heading("2", text="Номер клиента")
-treev.heading("3", text="Количество дней")
-treev.heading("4", text="Статус")
-treev.heading("5", text="К оплате")
+treev.heading("3", text="Дата заселения")
+treev.heading("4", text="Дата выселения")
+treev.heading("5", text="Количество дней")
+treev.heading("6", text="Статус")
+treev.heading("7", text="К оплате")
 
 
 def view():
     global l, page, p
     treev.delete(*treev.get_children())
-    cur.execute("Select RoomNum, ClientNum, Duration_of_Days, Status, Payment FROM Work order by RoomNum")
+    cur.execute("Select RoomNum, ClientNum, DateStart, DateEnd, Duration_of_Days, Status, Payment FROM Work order by RoomNum")
     obj = cur.fetchall()
     conn.commit()
     p = Paginator(obj, l)
