@@ -10,29 +10,29 @@ rootLog = Tk()
 rootLog.geometry('190x300')
 rootLog.title("Авторизация")
 
-l1 = Label(rootLog, text="Логин").pack(pady=10)
-e1 = Entry(rootLog)
+LabelLogin = Label(rootLog, text="Логин").pack(pady=10)
+EntryLogin = Entry(rootLog)
 
-l2 = Label(rootLog, text="Пароль")
+LabelPassword = Label(rootLog, text="Пароль")
 
-e2 = Entry(rootLog, show='*')
+EntryPassword = Entry(rootLog, show='*')
 
-cb1 = ttk.Combobox(rootLog, values=["Админ", "Менеджер"], state='readonly')
+ComboboxPost = ttk.Combobox(rootLog, values=["Админ", "Менеджер"], state='readonly')
 
-def cli(): 
-    log = e1.get()
-    pas = e2.get()
+def EntranceUser(): 
+    log = EntryLogin.get()
+    pas = EntryPassword.get()
     cur.execute("Select LoginUser, PasswordUser, Post From Users Where LoginUser =?;", [log])
     row=cur.fetchone()
     try:
         if ((str(row[0])==log) & (str(row[1])==pas) & (str(row[2])=="Админ")):
-            if (str(row[2])==cb1.get()):
+            if (str(row[2])==ComboboxPost.get()):
                 rootLog.destroy()
                 import MainFormAdmin
             else:
                 mb.showinfo("Ошибка", "У вас нет доступа")
         elif ((str(row[0])==log) & (str(row[1])==pas) & (str(row[2])=="Менеджер")):
-            if (str(row[2])==cb1.get()):
+            if (str(row[2])==ComboboxPost.get()):
                 rootLog.destroy()
                 import MainFormMan
             else:
@@ -42,9 +42,9 @@ def cli():
                 
     except:
         mb.showinfo("Ошибка", "Вы не правильно ввели логин или пароль")
-e1.pack(pady=10)
-l2.pack(pady=10)
-e2.pack(pady=10)
-l3 = Label(rootLog, text="Должность").pack(pady=10)
-cb1.pack(pady=10)
-b1 = Button(rootLog, text="Вход", width=10, command=cli).pack(pady=10)
+EntryLogin.pack(pady=10)
+LabelPassword.pack(pady=10)
+EntryPassword.pack(pady=10)
+LabelPost = Label(rootLog, text="Должность").pack(pady=10)
+ComboboxPost.pack(pady=10)
+ButtonIn = Button(rootLog, text="Вход", width=10, command=EntranceUser).pack(pady=10)
