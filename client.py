@@ -60,7 +60,7 @@ def addC(h1,h2,h3,h4,h5):
     else:
         mb.showinfo("Ошибка!", "Введите данные")
 
-def add():
+def viewAddForm():
     global rootAddC
     rootAddC = Tk()
     rootAddC.title("Добавление")
@@ -335,5 +335,5 @@ cbSch.bind('<<ComboboxSelected>>', search)
 cbSch.pack(side='top', padx=5, pady=5)
 entrS.pack(side='top', padx=5, pady=5)
 frame.pack(side='top', padx=5,pady=5)
-btnAdd = Button(rootClient, text="Добавить", command=add).pack(side='top', padx=5, pady=5)
+btnAdd = Button(rootClient, text="Добавить", command=viewAddForm).pack(side='top', padx=5, pady=5)
 view()

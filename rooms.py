@@ -59,7 +59,7 @@ def view():
     conn.commit()
     cb1.current(0)
     cb2['values']=""
-
+photo = "None"
 def ph():
     global photo
     imagefile=askopenfile(filetypes=[('JPG images', '.jpg'), ('PNG images', '.png'), ('JPEG images', '.jpg')])
@@ -68,7 +68,6 @@ def ph():
     s2=os.path.splitext(full_name)[1]
     s=s2.find( "'" )
     photo=s1+s2[0:s]
-    print(photo)
 
 def add(h1,h2,h3,h4,h5,h6,h7):
     try:
@@ -77,11 +76,10 @@ def add(h1,h2,h3,h4,h5,h6,h7):
         view()
         new_wnd.destroy()
     except:
-        mb.showinfo("Ошибка", "Поля заполнены некорректно")
+        mb.showinfo("Ошибка", "Заполните все поля, введите корректные данные")
 
  
 def rmadd():
-       
     global new_wnd
     new_wnd=Tk()
     new_wnd.title("Добавление комнаты")
@@ -145,9 +143,6 @@ def rmadd():
     e4 = Entry(new_wnd, textvariable=var4)
     
     btnP = Button(new_wnd,text="Выбор фото", width=10, command=ph)
-
-    
-
     
     btnAcc = Button(new_wnd, text="Добавить", width=10, command=lambda:add(h1=e1.get(), h2=cb1.get(), h3=cb2.get(), h4=e2.get(), h5=e3.get(), h6=e4.get(), h7=photo))
     e1.pack(side='top', pady=10, padx=5)
@@ -163,10 +158,6 @@ def rmadd():
     e4.pack(side='top', pady=10, padx=5)
     btnP.pack(side='top', pady=10, padx=5)
     btnAcc.pack(side='top', pady=10, padx=5)
-
-    
-
-
 
 cb1 = ttk.Combobox(rootRoom, values=['Без фильтрации','По номеру комнаты','По наличию телефона', 'По типу комнаты', 'Бронь', 'Состояние'], state='readonly')
 cb1.current(0)
@@ -207,14 +198,19 @@ def osv():
         it = treev.selection()[0]
         values=treev.item(it, option="values")
         id_r=values[0]
-        answer = mb.askyesno(title="Подтверждение", message="Вы точно хотите изменить статус номера?")
-        if answer:
-            cur.execute("UPDATE Rooms SET Employment = 'Свободно' Where RoomID = ?;", [str(id_r)])
-            conn.commit()
-            view()
-        rootRoom.mainloop()
+        stat = values[6]
+        if (stat=="Занято"):
+            answer = mb.askyesno(title="Подтверждение", message="Вы точно хотите изменить статус номера?")
+            if answer:
+                cur.execute("UPDATE Rooms SET Employment = 'Свободно' Where RoomID = ?;", [str(id_r)])
+                conn.commit()
+                view()
+            rootRoom.mainloop()
+        else:
+            mb.showinfo("Ошибка!","Номер свободен, выберите тот, который занят")
     except:
         mb.showinfo("Ошибка!", "Сначала нужно выбрать запись")
+        
 
 
 def left():
@@ -312,7 +308,6 @@ cbL.current(0)
 cbL.bind('<<ComboboxSelected>>', sel)
 cbL.place(relx=0.2, rely=0.05)
 treev.bind('<<TreeviewSelect>>', select)
-#lim=cbL.get()
 
 l=cbL.get()
 

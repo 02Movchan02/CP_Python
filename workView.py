@@ -37,7 +37,6 @@ treev.heading("5", text="Количество дней")
 treev.heading("6", text="Статус")
 treev.heading("7", text="К оплате")
 
-
 def view():
     global l, page, p
     treev.delete(*treev.get_children())
@@ -109,7 +108,7 @@ def retu():
                 conn.commit()
                 view()
         else:
-            answer = mb.showinfo(title="Предупреждение", message="Эта бронь уже оплачена")
+            answer = mb.showinfo(title="Предупреждение", message="Эта бронь уже оплачена, выберите другую")
     except:
         mb.showinfo("Ошибка!", "Сначало выберите запись")
 
@@ -146,7 +145,7 @@ def rigth():
     else:
         mb.showinfo("Внимание", "Дальше нет страниц")
     
-def sel(event):
+def CbPagInsert(event):
     global lim, l
     lim=cbL.get()
     l=cbL.get()
@@ -154,7 +153,7 @@ def sel(event):
 
 cbL = ttk.Combobox(rootView, values=['5', '10','15'], state='readonly')
 cbL.current(0)
-cbL.bind('<<ComboboxSelected>>', sel)
+cbL.bind('<<ComboboxSelected>>', CbPagInsert)
 cbL.place(relx=0.2, rely=0.05)
 treev.bind('<<TreeviewSelect>>', select)
 

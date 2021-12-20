@@ -6,7 +6,6 @@ import docx
 from docx.shared import Pt
 from datetime import datetime, timedelta
 
-
 conn=sql.connect('Hotel.db')
 cur=conn.cursor()
 
@@ -21,7 +20,6 @@ cb2 = ttk.Combobox(rootWork, state='readonly')
 
 l3 = Label(rootWork, text="Количество дней")
 e1 = Entry(rootWork)
-
 
 ds = ""
 de = ""
@@ -69,10 +67,7 @@ p1 = StringVar()
 ch1 = Checkbutton(rootWork, text="Бронь",variable=p1, onvalue="Бронь есть", offvalue="Брони нет", command=isChecked)
 p1.set("Брони нет")
 
-
-
-
-def zap():
+def insertCB():
     cur.execute("Select ClientID, Surname, Name From Clients Order by ClientID")
     client=cur.fetchall()
     cb2['values']=client
@@ -80,8 +75,6 @@ def zap():
     cur.execute("Select RoomID, Type From Rooms Where Employment = 'Свободно' Order By RoomID")
     room=cur.fetchall()
     cb1['values']=room
-
-
 
 def select(event):
     global RoomID, ClientID, price, phone, bron
@@ -103,7 +96,7 @@ def select(event):
         phone=[0]
         
 def addW(h1,h2,h3):
-    #try:
+    try:
         pay = (price[0]*float(h3))+phone[0]
         Dnow = datetime.now()
         dateE = Dnow + timedelta(days=cd)
@@ -167,10 +160,9 @@ def addW(h1,h2,h3):
                 font6.size = Pt(20)
                 
                 doc.save('Чек.docx')
-
                 
-    #except:
-        #mb.showinfo("Ошибка!", "Заполните данные")
+    except:
+        mb.showinfo("Ошибка!", "Заполните данные")
 cb1.bind('<<ComboboxSelected>>', select)
 cb2.bind('<<ComboboxSelected>>', select)
 
@@ -185,8 +177,7 @@ e1.pack(padx=5,pady=5)
 
 ch1.pack(padx=5,pady=5)
 
-
-zap()
+insertCB()
 btnAc = Button(rootWork, text="Оформить", command=lambda:addW(h1=RoomID, h2=ClientID, h3=e1.get())).pack(padx=5,pady=5)
 
 rootWork.mainloop()

@@ -21,7 +21,6 @@ def upd():
         view()
     rootAddU.mainloop()
     
-
 b2 = Button(rootAddU, text="Изменить", width=15, state='disabled', command=upd)
 
 isCheck = IntVar()
