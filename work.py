@@ -59,10 +59,6 @@ def isChecked():
         baccDate = Button(new_root, text = "Выбрать", command=dateAccept)
         baccDate.pack(side='bottom', padx = 5, pady=5)
         
-    else:
-        # убираются поля для ввода даты
-        mb.showinfo("2", "2")
-        
 p1 = StringVar()
 ch1 = Checkbutton(rootWork, text="Бронь",variable=p1, onvalue="Бронь есть", offvalue="Брони нет", command=isChecked)
 p1.set("Брони нет")
@@ -94,75 +90,83 @@ def select(event):
         phone=cur.fetchone()
     elif (ph[0]=="Нет"):
         phone=[0]
+
+def createCheck(pay, dateE,h1,h2,h3):
+    doc = docx.Document()
+    p = doc.add_paragraph("Чек")
+    p.alignment = 1
+    font = p.runs[0].font
+    font.size = Pt(30)
+    p2 = doc.add_paragraph("Комната №")
+    p2.add_run(" "+h1).bold = True
+    p2.alignment = 1
+    font1 = p2.runs[0].font
+    font1.size = Pt(30)
+                
+    p3 = doc.add_paragraph("Клиент №")
+    p3.add_run(" "+h2).bold = True
+    p3.alignment = 1
+    font2 = p3.runs[0].font
+    font2.size = Pt(30)
+                
+    p4 = doc.add_paragraph("Количество дней - ")
+    p4.add_run(" "+h3).bold = True
+    p4.alignment = 1
+    font3 = p4.runs[0].font
+    font3.size = Pt(30)
+                
+    p5 = doc.add_paragraph("К оплате - ")
+    p5.add_run(" "+str(pay)).bold = True
+    p5.alignment = 2
+    font4 = p5.runs[0].font
+    font4.size = Pt(30)
+
+    now = datetime.now()
+
+
+    datenow = doc.add_paragraph(str(now.strftime("%d-%m-%Y")))
+    font5 = datenow.runs[0].font
+
+    datenow.alignment = 2
+    font5.size = Pt(17)
+                
+    timenow = doc.add_paragraph(str(now.strftime("%H:%M")))
+    timenow.alignment = 2
+    font6 = timenow.runs[0].font
+    font6.size = Pt(17)
+                
+    doc.save('Чек.docx')
+
         
 def addW(h1,h2,h3):
-    try:
+    #try:
         pay = (price[0]*float(h3))+phone[0]
         Dnow = datetime.now()
-        dateE = Dnow + timedelta(days=cd)
+        
         answer = mb.askyesno(title="Подтверждение", message="К оплате "+str(pay)+" рублей, Подтвердить?")
         if answer:           
             if p1.get()=="Бронь есть":
+                dateE = Dnow + timedelta(days=cd)
                 cur.execute("Insert into Work (RoomNum, ClientNum, DateStart, DateEnd, Duration_of_Days, Payment) values (?,?,?,?,?,?);",(h1,h2,ds.strftime("%d-%m-%Y"),de.strftime("%d-%m-%Y"),h3,pay))
                 conn.commit()
                 cur.execute("UPDATE Rooms Set Booking = 'Бронь есть', Employment = 'Занято' Where RoomID = ?;", [str(RoomID)])
                 conn.commit()
                 cur.execute("UPDATE Work Set Status = 'Не оплачено' Where WorkID = (Select WorkID From Work order by WorkID desc limit 1);")
-                conn.commit()                              
+                conn.commit()
+                mb.showinfo("Успешно!", "Аренда успешно оформлена")
+                createCheck(pay, dateE,h1,h2,h3)
                 
             elif p1.get()=="Брони нет":
+                dateE = Dnow
                 cur.execute("Insert into Work (RoomNum, ClientNum, DateStart, DateEnd, Duration_of_Days, Payment) values (?,?,?,?,?,?);", (h1,h2,str(Dnow.strftime("%d-%m-%Y")),dateE.strftime("%d-%m-%Y"),h3,pay))
                 conn.commit()
                 cur.execute("UPDATE Rooms Set Employment = 'Занято' Where RoomID = ?;", [str(RoomID)])
                 conn.commit()
+                mb.showinfo("Успешно!", "Аренда успешно оформлена")
+                createCheck(pay, dateE,h1,h2,h3)
                 
-                doc = docx.Document()
-                p = doc.add_paragraph("Чек")
-                p.alignment = 1
-                font = p.runs[0].font
-                font.size = Pt(30)
-                p2 = doc.add_paragraph("Комната №")
-                p2.add_run(" "+h1).bold = True
-                p2.alignment = 1
-                font1 = p2.runs[0].font
-                font1.size = Pt(30)
-                
-                p3 = doc.add_paragraph("Клиент №")
-                p3.add_run(" "+h2).bold = True
-                p3.alignment = 1
-                font2 = p3.runs[0].font
-                font2.size = Pt(30)
-                
-                p4 = doc.add_paragraph("Количество дней - ")
-                p4.add_run(" "+h3).bold = True
-                p4.alignment = 1
-                font3 = p4.runs[0].font
-                font3.size = Pt(30)
-                
-                p5 = doc.add_paragraph("К оплате - ")
-                p5.add_run(" "+str(pay)).bold = True
-                p5.alignment = 2
-                font4 = p5.runs[0].font
-                font4.size = Pt(30)
-
-                now = datetime.now()
-
-
-                datenow = doc.add_paragraph(str(now.strftime("%d-%m-%Y")))
-                font5 = datenow.runs[0].font
-
-                datenow.alignment = 2
-                font5.size = Pt(24)
-                
-                timenow = doc.add_paragraph(str(now.strftime("%H:%M")))
-                timenow.alignment = 2
-                font6 = timenow.runs[0].font
-                font6.size = Pt(20)
-                
-                doc.save('Чек.docx')
-                
-    except:
-        mb.showinfo("Ошибка!", "Заполните данные")
+    #except:
+        #mb.showinfo("Ошибка!", "Заполните данные")
 cb1.bind('<<ComboboxSelected>>', select)
 cb2.bind('<<ComboboxSelected>>', select)
 
