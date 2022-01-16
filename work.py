@@ -101,26 +101,34 @@ def createCheck(pay, dateE,h1,h2,h3):
     p2.add_run(" "+h1).bold = True
     p2.alignment = 1
     font1 = p2.runs[0].font
+    font01 = p2.runs[1].font
     font1.size = Pt(30)
+    font01.size = Pt(30)
                 
     p3 = doc.add_paragraph("Клиент №")
     p3.add_run(" "+h2).bold = True
     p3.alignment = 1
     font2 = p3.runs[0].font
+    font02 = p3.runs[1].font
     font2.size = Pt(30)
+    font02.size = Pt(30)
                 
     p4 = doc.add_paragraph("Количество дней - ")
     p4.add_run(" "+h3).bold = True
     p4.alignment = 1
     font3 = p4.runs[0].font
+    font03 = p4.runs[0].font
     font3.size = Pt(30)
+    font03.size = Pt(30)
                 
     p5 = doc.add_paragraph("К оплате - ")
     p5.add_run(" "+str(pay)).bold = True
     p5.alignment = 2
     font4 = p5.runs[0].font
+    font04 = p5.runs[1].font
     font4.size = Pt(30)
-
+    font04.size = Pt(30)
+    
     now = datetime.now()
 
 
