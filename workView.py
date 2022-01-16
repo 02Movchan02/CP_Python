@@ -59,7 +59,7 @@ def select(event):
     it = treev.selection()[0]
     values=treev.item(it, option="values")
     id_room=values[0]
-    stat = values[3]
+    stat = values[5]
     rootView.mainloop()
 
 treev.bind('<<TreeviewSelect>>', select)
