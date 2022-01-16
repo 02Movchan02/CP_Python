@@ -21,6 +21,7 @@ def cl():
 def rm():
     global cli2, window
     if (cli2==0):
+        rootM.destroy()
         import window
         cli2+=1
     else:
