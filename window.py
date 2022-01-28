@@ -4,6 +4,7 @@ from tkinter.filedialog import*
 from PIL import Image, ImageTk
 import sqlite3 as sql
 import importlib
+from datetime import datetime
 
 conn=sql.connect('Hotel.db')
 cur=conn.cursor()
@@ -14,10 +15,17 @@ j=1
 
 images=[]
 
+dnow = datetime.now().strftime("%d-%m-%Y")
 
+cur.execute("select DateEnd From Work")
+dateEnd = cur.fetchall()
+
+            
+        
+    
 def b1(event):
     f=event.widget['text']
-    cur.execute("Select * FROM Rooms Where RoomID=?", [str(f)])
+    cur.execute("Select RoomID, Type, PhoneRoom, Places, Price_day, Price_phone, Employment, Booking FROM Rooms  Where RoomID=?", [str(f)])
     new=Tk()
     new.title("Информация")
 
@@ -30,7 +38,7 @@ def b1(event):
     scrlbar.pack(side='right', fill='y')
     treev.configure(yscrollcommand=scrlbar.set)
     
-    treev["columns"] = ("1", "2", "3", "4", "5", "6", "7", "8", "9")
+    treev["columns"] = ("1", "2", "3", "4", "5", "6", "7", "8")
     treev['show']='headings'
     treev.column("1", width=50, anchor='c')
     treev.column("2", width=120, anchor='se')
@@ -40,7 +48,6 @@ def b1(event):
     treev.column("6", width=100, anchor='se')
     treev.column("7", width=100, anchor='se')
     treev.column("8", width=130, anchor='se')
-    treev.column("9", width=110, anchor='se')
 
     treev.heading("1", text="Номер комнаты")
     treev.heading("2", text="Тип")
@@ -50,7 +57,6 @@ def b1(event):
     treev.heading("6", text="Цена за телефон")
     treev.heading("7", text="Состояние")
     treev.heading("8", text="Бронь")
-    treev.heading("9", text="Фото")
 
     def work():
         rootWind.destroy()
