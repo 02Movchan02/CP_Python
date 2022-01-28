@@ -37,9 +37,8 @@ def isChecked():
         global ds, de
         ds = datetime.strptime(dateStart.get(), "%d-%m-%Y")
         de = datetime.strptime(dateEnd.get(), "%d-%m-%Y")
-            
-        delta = de-ds
         
+        delta = de-ds
         if (delta.days > 0):
             countDay = delta.days
             addCountDay(countDay)
@@ -58,6 +57,7 @@ def isChecked():
         dateEnd.pack(side='left', padx=5)
         baccDate = Button(new_root, text = "Выбрать", command=dateAccept)
         baccDate.pack(side='bottom', padx = 5, pady=5)
+        
         
 p1 = StringVar()
 ch1 = Checkbutton(rootWork, text="Бронь",variable=p1, onvalue="Бронь есть", offvalue="Брони нет", command=isChecked)
@@ -145,21 +145,25 @@ def createCheck(pay, dateE,h1,h2,h3):
                 
     doc.save('Чек.docx')
 
+
         
 def addW(h1,h2,h3):
     #try:
+        
         pay = (price[0]*float(h3))+phone[0]
         Dnow = datetime.now()
-        
         answer = mb.askyesno(title="Подтверждение", message="К оплате "+str(pay)+" рублей, Подтвердить?")
         if answer:           
             if p1.get()=="Бронь есть":
                 dateE = Dnow + timedelta(days=cd)
+                dat = ""+ds.strftime("%d:%m:%Y")+" - "+de.strftime("%d:%m:%Y")+""
                 cur.execute("Insert into Work (RoomNum, ClientNum, DateStart, DateEnd, Duration_of_Days, Payment) values (?,?,?,?,?,?);",(h1,h2,ds.strftime("%d-%m-%Y"),de.strftime("%d-%m-%Y"),h3,pay))
                 conn.commit()
-                cur.execute("UPDATE Rooms Set Booking = 'Бронь есть', Employment = 'Занято' Where RoomID = ?;", [str(RoomID)])
+                cur.execute("UPDATE Rooms Set Booking = '"+dat+"', Employment = 'Свободно' Where RoomID = ?;", [str(RoomID)])
                 conn.commit()
                 cur.execute("UPDATE Work Set Status = 'Не оплачено' Where WorkID = (Select WorkID From Work order by WorkID desc limit 1);")
+                conn.commit()
+                cur.execute("Update Work Set EmploymentStatus = 'Не заселён' Where WorkID = (Select WorkID From Work order by WorkID desc limit 1);")
                 conn.commit()
                 mb.showinfo("Успешно!", "Аренда успешно оформлена")
                 createCheck(pay, dateE,h1,h2,h3)
@@ -169,6 +173,8 @@ def addW(h1,h2,h3):
                 cur.execute("Insert into Work (RoomNum, ClientNum, DateStart, DateEnd, Duration_of_Days, Payment) values (?,?,?,?,?,?);", (h1,h2,str(Dnow.strftime("%d-%m-%Y")),dateE.strftime("%d-%m-%Y"),h3,pay))
                 conn.commit()
                 cur.execute("UPDATE Rooms Set Employment = 'Занято' Where RoomID = ?;", [str(RoomID)])
+                conn.commit()
+                cur.execute("Update Work Set EmploymentStatus = 'Заселён' Where WorkID = (Select WorkID From Work order by WorkID desc limit 1);")
                 conn.commit()
                 mb.showinfo("Успешно!", "Аренда успешно оформлена")
                 createCheck(pay, dateE,h1,h2,h3)
