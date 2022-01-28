@@ -36,7 +36,8 @@ DateStart TEXT,
 DateEnd TEXT,
 Duration_of_Days INT,
 Payment REAL,
-Status TEXT DEFAULT 'Оплачено');
+Status TEXT DEFAULT 'Оплачено',
+EmploymentStatus TEXT);
 """)
 conn.commit()
 
